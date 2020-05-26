@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+   <softinfo>
+      <application>中小地震震源参数稳健反演程序运行参数配置</application>
+      <development_unit>山东省地震预报研究中心</development_unit>
+      <version>ver2.0 beta</version>
+      <author>
+         <developer>zhangzs</developer>
+         <contact>858488045@qq.com</contact>
+      </author>
+   </softinfo>
+   <data>
+      <waveform>1</waveform>
+      <reportform>1</reportform>
+   </data>
+   <preprocessing>
+      <Qf_a>300</Qf_a>
+      <Qf_b>0.5</Qf_b>
+      <gatten>1</gatten>
+      <resp>1</resp>
+      <site>1</site>
+   </preprocessing>
+   <signal>
+      <fftnum>1024</fftnum>
+      <wavetype>2</wavetype>
+      <delay>1</delay>
+   </signal>
+   <model>3</model>
+   <invert>1</invert>
+   <ssp>
+      <density>2.67</density>
+      <velocity>3.2</velocity>
+      <radiation>0.6</radiation>
+   </ssp>
+</config>

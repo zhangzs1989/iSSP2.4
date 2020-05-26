@@ -1,0 +1,4 @@
+1、合并zip中的par参数
+
+2、绘制谱参数（M-fc、M-fmax）
+3、绘制震源参数(M-M0、M-Mw、Mw-R、Mw-sd、Mo-fc-sd)

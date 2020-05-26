@@ -1,0 +1,12 @@
+%%-- input filepath of seismic wave(.evt) and report(.txt)
+%%-- 1st line is evtfile
+%%-- 2nd line is reportfile
+%%-----------------------------------------
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201702141731.0002.evt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201702141731.0002.txt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201703030249.0001.evt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201703030249.0001.txt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201703060103.0001.evt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201703060103.0001.txt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201703091948.0003.evt
+F:/数据/长岛SEED2evt/长岛evt+观测报告/SD.201703091948.0003.txt
