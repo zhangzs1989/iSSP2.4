@@ -35,18 +35,27 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.outfc = outfc;
                 case 3 % pso
 %                     fitnessfcn = @(par,x) (par(1)./(1+(x./par(2)).^2));                     
-                    LB=[1 1]; % lower boundary
-                    UB=[10000 10]; % upper boundary
-%                     fitnessfcn = str2func('brune');
-                    ObjectiveFunction = @brune_ga; 
-                    nvars = 2; % number of varibles
-                    ConstraintFunction = []; % constraints
-                    rng default; % for reproducibality ?
-                    [coeff,fval]=ga(ObjectiveFunction,nvars);
+                     uplimits= [];
+                    lolimits= [];
+                    problem.options.InitialPopulation = [] ;
+                    problem.Aineq = [] ; problem.bineq = [] ;
+                    problem.Aeq = [] ;   problem.beq = [] ;
+                    problem.LB = lolimits ;
+                    problem.UB = uplimits ;
+            % 		problem.LB = [] ;
+            % 		problem.UB = [] ;
+                    problem.fitnessfcn = @brune_ga;
+                    problem.nvars = 2 ;
+                    problem.nonlcon = [] ;
+                    try
+                    [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);                    
                     spectpara.omg = coeff(1);
                     spectpara.fc = coeff(2);
                     spectpara.fc_intervals = [coeff(2),coeff(2)];
                     spectpara.omg_intervals = [coeff(1),coeff(1)];
+                    catch
+                        
+                    end
             end
         case 2  % High-CutÄ£ÐÍ      
             switch invert
@@ -103,15 +112,25 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.p_intervals = [p,p];
                     spectpara.outfc = outfc;
                     spectpara.outfmax = outfmax;
-                case 3 % pso
-                    LB=[0 1 1 1]; % lower boundary
-                    UB=[10000 10 20 5]; % upper boundary
-%                     fitnessfcn = str2func('brune');
-                    ObjectiveFunction = @highcut_ga;
-                    nvars = 4; % number of varibles
-                    ConstraintFunction = []; % constraints
-                    rng default; % for reproducibality
-                    [coeff,~] = ga(ObjectiveFunction,nvars);
+                case 3 % ga
+                    [omg0,fc0,fmax0,p0,outfc0,outfmax0] = spectpara_rmse_HC(xdata,ydata);
+                    uplimits= [];
+                    lolimits= [];
+                    problem.options.InitialPopulation = [omg0 fc0 fmax0 p0];
+                    problem.Aineq = [] ; problem.bineq = [] ;
+                    problem.Aeq = [] ;   problem.beq = [] ;
+                    problem.LB = lolimits ;
+                    problem.UB = uplimits ;
+            % 		problem.LB = [] ;
+            % 		problem.UB = [] ;
+                    problem.fitnessfcn = @highcut_ga;
+                    problem.nvars = 4 ;
+                    problem.nonlcon = [] ;
+%                     [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);
+                    
+                    [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);
+%                     omg=mean(acc)/(2*pi*coeff(2)).^2;
+                    try
                     spectpara.fc = coeff(2);
                     spectpara.omg = coeff(1);
                     spectpara.fmax = coeff(3);
@@ -120,6 +139,17 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.omg_intervals = [coeff(1),coeff(1)];
                     spectpara.fmax_intervals = [coeff(3),coeff(3)];
                     spectpara.p_intervals = [coeff(4),coeff(4)];
+                    catch ErrorInfo
+                        throw(ErrorInfo);
+                    end
+%                     spectpara.fc = coeff(2);
+%                     spectpara.omg = coeff(1);
+%                     spectpara.fmax = coeff(3);
+%                     spectpara.p = coeff(4);
+%                     spectpara.fc_intervals = [coeff(2),coeff(2)];
+%                     spectpara.omg_intervals = [coeff(1),coeff(1)];
+%                     spectpara.fmax_intervals = [coeff(3),coeff(3)];
+%                     spectpara.p_intervals = [coeff(4),coeff(4)];
             end
         case 3 %Brune2 model
             switch invert
@@ -154,20 +184,38 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.outfc = outfc;
                     spectpara.outgamma = outgamma;
                 case 3 %pso
-                    LB=[0 1 1]; % lower boundary
-                    UB=[10000 10 5]; % upper boundary
-%                     fitnessfcn = str2func('brune');
-                    ObjectiveFunction = @brune2_ga; 
-                    nvars = 3; % number of varibles
-                    ConstraintFunction = []; % constraints
-%                     rng default; % for reproducibality ?
-                    [coeff,fval]=ga(ObjectiveFunction,nvars);
+% %                     LB=[0 1 1]; % lower boundary
+% %                     UB=[10000 10 5]; % upper boundary
+% % %                     fitnessfcn = str2func('brune');
+% %                     ObjectiveFunction = @brune2_ga; 
+% %                     nvars = 3; % number of varibles
+% %                     ConstraintFunction = []; % constraints
+% % %                     rng default; % for reproducibality ?
+% %                     [coeff,~]=ga(ObjectiveFunction,nvars);
+                    uplimits= [0 1 1];
+                    lolimits= [50 10 5];
+                    problem.options.InitialPopulation = [5,mean(acc)/(2*pi*5).^2,2] ;
+                    problem.Aineq = [] ; problem.bineq = [] ;
+                    problem.Aeq = [] ;   problem.beq = [] ;
+                    problem.LB = lolimits ;
+                    problem.UB = uplimits ;
+            % 		problem.LB = [] ;
+            % 		problem.UB = [] ;
+                    problem.fitnessfcn = @brune2_ga ;
+                    problem.nvars = 3 ;
+                    problem.nonlcon = [] ;
+                    try
+                    [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);
+                    omg=mean(acc)/(2*pi*coeff(2)).^2;
                     spectpara.fc = coeff(2);
-                    spectpara.omg = coeff(1);
+                    spectpara.omg = omg;
                     spectpara.gamma = coeff(3);
                     spectpara.fc_intervals = [coeff(2),coeff(2)];
                     spectpara.omg_intervals = [coeff(1),coeff(1)];
                     spectpara.gamma_intervals = [coeff(3),coeff(3)];
+                    catch ErrorInfo
+                        throw(ErrorInfo);
+                    end
             end
     end
 end

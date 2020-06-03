@@ -2,7 +2,7 @@ function Set_Cal_Para()
 try
 prompt0 = {                                                         % 对话框参数
     '震源模型【1-\it{Brune(\omega^{-2})}; 2-\it{High-Cut};3-\it{Brune2(w^{-\gamma})}】',1
-    '拟合反演【1-\it{最小二乘法}； 2-\it{最小残差}; 】',1
+    '拟合反演【1-\it{最小二乘法}； 2-\it{最小残差}; 3-\it{粒子群寻优算法};】',1
     '波形数据格式【1-\it{evt(only supported now)}; 2-\it{SAC}; 3-\ot{SEED}】',1.
     '观测报告格式【1-\it{全国编目系统产生的正式观测报告}】',1
     '截取波段类型【1-\it{P波}； 2-\it{S波}】',2

@@ -4,13 +4,13 @@ fv = xdata;displ = ydata;pp = specpara;mo = mo;mw = mw;r = r;sd = sd;model = mod
 fc = pp.fc;f = fv;omg = pp.omg;
 switch model
     case 1 % Brune
-    h1 = loglog(fv,displ,'color',[.7 .7 .7]);grid on;%title ('SH - Spectrum');
+    h1 = loglog(fv,displ,'m');grid on;%title ('SH - Spectrum');
     xlabel('Frequency/Hz'); ylabel( 'Displacement Spectrum');grid on;hold on
     spektrd=((2*pi*fv).^0)*pp.omg./((1.+(fv./pp.fc).^2));% Brune Model with high cut
     spektrd1=((2*pi*pp.fc).^0)*pp.omg./((1.+(pp.fc./pp.fc).^2));
-    h2 = loglog(f,spektrd,'k','LineWidth',1.2);grid on;
-    h3 = plot(fc,spektrd1,'ko', 'MarkerSize',8,'MarkerEdgeColor','k','MarkerFaceColor',[.6 .6 .6]);
-    plot(fc,spektrd1,'k+', 'MarkerSize',20);
+    h2 = loglog(f,spektrd,'b','LineWidth',1.2);grid on;
+    h3 = plot(fc,spektrd1,'ro', 'MarkerSize',8,'MarkerEdgeColor','k','MarkerFaceColor','g');
+    plot(fc,spektrd1,'r+', 'MarkerSize',20);
     tx=fv(1);
     ty=min(spektrd);
 %     text(3,0.05,'\it f_c')

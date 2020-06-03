@@ -25,8 +25,8 @@
       <wavetype>2</wavetype>
       <delay>1</delay>
    </signal>
-   <model>3</model>
-   <invert>1</invert>
+   <model>1</model>
+   <invert>3</invert>
    <ssp>
       <density>2.67</density>
       <velocity>3.2</velocity>
