@@ -12,14 +12,21 @@ file = textread([pathname,filename],'%s', 'delimiter', '\n', 'whitespace', '', .
 if isempty(file)
     msgbox('check input file is or not empty');
 else
-    eqn  = numel(file)/2;
-    for eqi = 1:eqn
-        try
+    eqn  = numel(file)/2;eqn=floor(eqn);
+%     try
+    for eqi = 1:eqn    
         h_axes=findobj(gcf,'type','axes'); %%获得当前图中所有坐标的句柄
         % h_children_axes=allchild(h_axes); %% 获得坐标的子对象的句柄
         delete(h_axes);
         evt_path_name = char(file{(eqi-1)*2+1});
         rpt_path_name = char(file{eqi*2});
+        if strcmp(evt_path_name(end-3:end),'.txt')
+            temp = rpt_path_name;
+            rpt_path_name = evt_path_name;
+            evt_path_name = temp;
+        else
+            
+        end       
             [tree, ~ , ~] = Read_xml('./config/config.xml');
             %% 预处理参数
             preconditioning.gatten = tree.preprocessing.gatten;
@@ -105,8 +112,7 @@ else
             plot_stationspectrum(fv,dis,2,name);
             h_acc = axes(gcf);
             set(h_acc,'Position',[0.08 0.1 0.35 0.3]);
-            plot_stationspectrum(fv,acc,2,name);
-
+            plot_stationspectrum(fv,acc,3,name);
              %% 拟合反演谱参数
             fv_i = fv(fv<20);
             vel_i = vel(fv<20);
@@ -151,7 +157,7 @@ else
                 specpara.p,    specpara.p_intervals(1),    specpara.p_intervals(2),     ...
                 mo,mw,r,sd);
                 fclose('all');
-                else
+                else 
                     str_tmp = ['%%','Time, ','Lontitude, ','Latitude, ','Mag, ','Depth, ','fc, ','fc1, ','fc2, ',...
                     'fmax, ','fmax1, ','fmax2, ','p, ','p1, ','p2, ','Mo, ','Mw, ','Rupture(m), ','strssdrop(MPa)'];
                 fprintf(fp_par,'%s\t\n',str_tmp);                   
@@ -199,14 +205,19 @@ else
                 delete(['./result/',name,'.csv']);
             end
             fclose('all');
-            clear fv S_sta vel fv dis disl fv acc acc1 fvv            %                     end
-            catch
+                     %                     end
+%             catch
+            end
+            
+    clear fv S_sta vel fv dis disl fv acc acc1 fvv  
+%     continue;
     end
-    end
-    msgbox('计算完成！')
+%     msgbox('计算完成！')
     fclose('all');
+%     end
 end
+msgbox('计算完成！')
 catch ErrorInfo
-    msgbox(ErrorInfo.message);
+    msgbox([name,',',ErrorInfo.message]);
 end
 end
