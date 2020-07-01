@@ -11,7 +11,8 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
         case 1
             switch invert
                 case 1
-                    [fitobj_1,gof] = fit(xdata,disl,(fun_Brune),'StartPoint',[0,2],...
+                    [omg0,fc0,~,~,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,gof] = fit(xdata,disl,(fun_Brune),'StartPoint',[omg0,fc0],...
                     'Lower',[min(ydata) min(xdata)],...
                     'Upper',[max(disl) 20  ],...
                     'Robust','on');
@@ -35,9 +36,11 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.outfc = outfc;
                 case 3 % pso
 %                     fitnessfcn = @(par,x) (par(1)./(1+(x./par(2)).^2));                     
-                     uplimits= [];
-                    lolimits= [];
-                    problem.options.InitialPopulation = [] ;
+                    uplimits= [0 10];
+                    lolimits= [1000 1];
+                    [omg0,fc0,~,~,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    x0 = [omg0,fc0];
+                    problem.options.InitialPopulation = x0 ;
                     problem.Aineq = [] ; problem.bineq = [] ;
                     problem.Aeq = [] ;   problem.beq = [] ;
                     problem.LB = lolimits ;
@@ -59,8 +62,9 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
             end
         case 2  % High-Cut模型      
             switch invert
-                case 1  % matlab 自带拟合函数                  
-                    [fitobj_1,~] = fit(xdata,disl,fun_Boore,'StartPoint',[0,2,10,2],...
+                case 1  % matlab 自带拟合函数        
+                    [omg,fc,fmax,p,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,~] = fit(xdata,disl,fun_Boore,'StartPoint',[omg,fc,fmax,p],...
                         'Lower',[0,1,5,0],...
                         'Upper',[Inf,10,20,5],...
                         'Robust','on');
@@ -126,8 +130,7 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     problem.fitnessfcn = @highcut_ga;
                     problem.nvars = 4 ;
                     problem.nonlcon = [] ;
-%                     [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);
-                    
+%                     [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);                    
                     [coeff, misfit_min,exitflag,output,population,scores]=pso(problem);
 %                     omg=mean(acc)/(2*pi*coeff(2)).^2;
                     try
@@ -154,7 +157,8 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
         case 3 %Brune2 model
             switch invert
                 case 1 %fit
-                    [fitobj_1,~] = fit(xdata,disl,(fun_Brune2),'StartPoint',[0,2,2],...
+                    [omg0,fc0,~,p0,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,~] = fit(xdata,disl,(fun_Brune2),'StartPoint',[omg0,fc0,p0],...
                     'Lower',[0,1,1],...
                     'Upper',[max(disl) 10 5],...
                     'Robust','on');

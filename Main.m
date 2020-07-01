@@ -44,6 +44,9 @@ else
     rmdir([cd,'\','temp'],'s')
     mkdir([cd,'\','temp'])  
 end
+if ~exist([cd,'\','log']) 
+    mkdir([cd,'\','log'])         % 若不存在，在当前目录中产生一个子目录‘result’，计算所得参数
+end
 for step = 1:1000
    waitbar(step/1000) 
 end
@@ -69,6 +72,7 @@ h_submenu11 = uimenu(h_mainmenu1,'label','单个地震自动计算');
     h_submenu112 = uimenu(h_submenu11,'label','导入观测报告..','callback','Loadreport();');
     h_submenu113 = uimenu(h_submenu11,'label','运行计算..','callback','Single_eq_cal();');
 h_submenu12 = uimenu(h_mainmenu1,'label','批量自动计算','callback','Cal_Batch();');
+h_submenu13 = uimenu(h_mainmenu1,'label','停止计算','callback','Cal_exit();');
 %     h_submenu13 = uimenu(h_mainmenu1,'label','逐步计算','callback','set(gcf,''Color'',''y'')');
 
 h_mainmenu6 = uimenu(gcf,'label','制图');
@@ -103,10 +107,10 @@ h_mainmenu5 = uimenu(gcf,'label','帮助');
 %     hc_egg2=uicontextmenu();                         %建立快捷菜单hc
 %     h_egg2.UIContextMenu = hc_egg2;
 %     mhsub1=uimenu(hc_egg2,'Label','Easter egg','CallBack','egg2'); % 彩蛋2
-    hc_main = uicontextmenu();
-    hmain.UIContextMenu = hc_main;
-    mhsub1=uimenu(hc_main,'Label','save to png','CallBack','savefigure(1)'); % 另存png
-    mhsub1=uimenu(hc_main,'Label','save to fig','CallBack','savefigure(2)'); % 另存fig
-    mhsub1=uimenu(hc_main,'Label','save to eps','CallBack','savefigure(3)'); % 另存eps
+%     hc_main = uicontextmenu();
+%     hmain.UIContextMenu = hc_main;
+%     mhsub1=uimenu(hc_main,'Label','save to png','CallBack','savefigure(1)'); % 另存png
+%     mhsub1=uimenu(hc_main,'Label','save to fig','CallBack','savefigure(2)'); % 另存fig
+%     mhsub1=uimenu(hc_main,'Label','save to eps','CallBack','savefigure(3)'); % 另存eps
 catch
 end

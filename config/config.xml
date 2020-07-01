@@ -12,10 +12,11 @@
    <data>
       <waveform>1</waveform>
       <reportform>1</reportform>
+      <stanum>4</stanum>
    </data>
    <preprocessing>
-      <Qf_a>300</Qf_a>
-      <Qf_b>0.5</Qf_b>
+      <Qf_a>363.9</Qf_a>
+      <Qf_b>1.3741</Qf_b>
       <gatten>1</gatten>
       <resp>1</resp>
       <site>1</site>
@@ -26,10 +27,10 @@
       <delay>1</delay>
    </signal>
    <model>1</model>
-   <invert>3</invert>
+   <invert>1</invert>
    <ssp>
       <density>2.67</density>
       <velocity>3.2</velocity>
-      <radiation>0.6</radiation>
+      <radiation>0.41</radiation>
    </ssp>
 </config>

@@ -6,6 +6,7 @@ end
 plot(SPECTRA{1}.to,SPECTRA{1}.do(:,1),'color',[0.7 0.7 0.7]);
 hold on
 plot(SPECTRA{1}.t,SPECTRA{1}.d(:,1),'color','r');
+xlabel('Time/s'); ylabel('Amplitude');box on;
 pp=gca;
 c = uicontextmenu;
 pp.UIContextMenu = c;
@@ -26,7 +27,6 @@ function setlinestyle(source,callbackdata)
     SPECTRA{k}.t(end)-SPECTRA{k}.t(1) 2*max(max(abs(SPECTRA{k}.do(:,1))))],'FaceColor','g'...
                ,'EdgeColor','red','LineWidth',1);
            plot(SPECTRA{k}.t,SPECTRA{k}.d(:,1),'color','r');
-           hold on
            xlabel('Time/s'); ylabel('Amplitude');box on;
            title ([char(SPECTRA{k}.staname),',','BeginTime:',datestr(SPECTRA{k}.wavebegintime,31)]);
        end

@@ -12,12 +12,13 @@ function Create_config_default()
     %% 输入数据类型
     config.data.waveform                = 1;            % waveform format,.evt(supported now)  .sac  .seed
     config.data.reportform              = 1;            % reportfile for one event download from "全国编目系统"
+    config.data.stanum                  = 4;            % 平均震源谱所需台站数目
     %% 预处理
     config.preprocessing.Qf_a           = 363.9;          % Q value:Anelastic attenuation adjesting
     config.preprocessing.Qf_b           = 1.3741;          % Q(f) = a*f^b;
     config.preprocessing.gatten         = 1;            % 几何衰减，G(R)=R^(-1)(supported now) or 三段线性回归 
     config.preprocessing.resp     = 1;            % 仪器响应，Amplitude frequency = 1;
-    config.preprocessing.site           = 1;            % 场地响应，site response = 1;
+    config.preprocessing.site           = 1;            % 场地响应，site response = 1;               
     %% 波形截取、变换
     config.signal.fftnum   = 1024;  % 2^n，e.g. 512，1024，2048，etc.
     config.signal.wavetype = 2;   % 1-'S' or 2-'P'
