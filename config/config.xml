@@ -15,11 +15,12 @@
       <stanum>4</stanum>
    </data>
    <preprocessing>
-      <Qf_a>363.9</Qf_a>
-      <Qf_b>1.3741</Qf_b>
+      <Qf_a>300</Qf_a>
+      <Qf_b>0.5</Qf_b>
       <gatten>1</gatten>
       <resp>1</resp>
       <site>1</site>
+      <filter>D:\Program Files\MATLAB\R2016a\works\2020面上项目\untitled2.mat</filter>
    </preprocessing>
    <signal>
       <fftnum>1024</fftnum>

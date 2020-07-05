@@ -18,7 +18,8 @@ function Create_config_default()
     config.preprocessing.Qf_b           = 1.3741;          % Q(f) = a*f^b;
     config.preprocessing.gatten         = 1;            % 几何衰减，G(R)=R^(-1)(supported now) or 三段线性回归 
     config.preprocessing.resp     = 1;            % 仪器响应，Amplitude frequency = 1;
-    config.preprocessing.site           = 1;            % 场地响应，site response = 1;               
+    config.preprocessing.site           = 1;            % 场地响应，site response = 1;
+    config.preprocessing.filter  = 0;                   %1-滤波；0-不滤波
     %% 波形截取、变换
     config.signal.fftnum   = 1024;  % 2^n，e.g. 512，1024，2048，etc.
     config.signal.wavetype = 2;   % 1-'S' or 2-'P'

@@ -1,5 +1,4 @@
 function plt_ssp()
-close 
 [filename,pathname]  = uigetfile({'*.par'},'选择计算结果文件');
 [tree, ~ , ~] = Read_xml('./config/config.xml');
 if exist('filename') && exist('pathname')
@@ -28,7 +27,7 @@ if exist('filename') && exist('pathname')
 
     f2 = figure(1002);
 %     subplot(121)
-    plot(mag,fc,'k.','MarkerSize',15),xlim([2.5 4.5])
+    plot(mag,fc,'ko','MarkerSize',15),xlim([2.5 4.5])
     grid minor, xlabel('ML'),ylabel('Corner frequency/Hz'),title('震级与拐角频率的关系')
 %     subplot(122)
 %     plot(Mw,fc,'k.','MarkerSize',15)
@@ -62,7 +61,6 @@ if exist('filename') && exist('pathname')
     delete(['./figure/',filename,'_3','.png']);
     delete(['./figure/',filename,'_3','.eps']);
     delete(['./figure/',filename,'_3','.fig']);
-    
 else
 end
 end

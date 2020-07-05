@@ -5,7 +5,7 @@ Qf = preconditioning.Qf;
 gatten = preconditioning.gatten;
 resp = preconditioning.instrumentcase;
 site = preconditioning.site;
-
+filterpath = preconditioning.filter;
 %% ¼ÆËã²ÎÊý
 model = preconditioning.model;
 delay = preconditioning.delay;
@@ -37,15 +37,23 @@ for sti = 1:WAVEHEAD.stn
     [dist,az]   = distance(EVENT.epicenter,station);
     dist        = distdim(dist,'deg','km');
     samplerate  = WAVEHEAD.spara(sti).sample;
+    
     y=WAVE{sti}(:,1); y=y-mean(y);  % N-S
     x=WAVE{sti}(:,2); x=x-mean(x);  % E-W
     z=WAVE{sti}(:,3); z=z-mean(z);  % U-D
+    x1 = x;y1=y;z1=z;
+    if filterpath==0
+        y = y;x = x;z = z;
+    else
     %---------------------------------------------------------------
-    %   ÂË²¨0.1-20HZ
+    %   ÂË²¨
     %---------------------------------------------------------------
-    %         x = bandpass(x,0.1,20,0.01,4);
-    %         y = bandpass(y,0.1,20,0.01,4);
-    %         z = bandpass(z,0.1,20,0.01,4);
+    coef = load(filterpath);[b,a]=sos2tf(coef.SOS,coef.G);
+    y = filtfilt(b,a,y1);x = filtfilt(b,a,x1);z = filtfilt(b,a,z1);  
+    end
+%             x = bandpass(x,20,25,4);
+%             y = bandpass(y,0.1,20,0.01,4);
+%             z = bandpass(z,0.1,20,0.01,4);
     %         x = detrend(x);y = detrend(y);z = detrend(z);
     %---------------------------------------------------------------
     %   STEP-1      ROTATION ABOUT Z-AXIS CLOCKWISE AXIS

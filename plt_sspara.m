@@ -17,23 +17,28 @@ if exist('filename') && exist('pathname')
         r(ii) = str2num(strtmp{18});sd(ii) = str2num(strtmp{19});
         ii = ii +1;
     end
+    % 破裂半径和应力降
     f1 = figure(2001);
-    fci=[0.01;180]; bar=[0.1,1,10,100];
-    for i=1:4 % bar bar/10=Mpa
-       for j=1:2 % fc
-          Mc(j)=(0.49*tree.ssp.velocity*100000).^3.*bar(i)/fci(j)^3;
-       end
-       loglog(Mc,fci,'--','LineWidth',1.0);
-       hold on
-    end
-    loglog(Mo,fc,'ko','MarkerSize',5),hold on;
-    box on,grid minor,xlabel('Seismic moment /N·m'),ylabel('Corner Frequency /Hz')
-    % xlim([10^10 10^18]),ylim([0.1 200])
-    legend('\sigma = 0.01 MPa','\sigma = 0.10 MPa','\sigma = 1.00 MPa','\sigma = 10.0 MPa','This study') 
-    saveas(gcf,['./figure/',filename,'_1','.png']);
-    saveas(gcf,['./figure/',filename,'_1','.eps']);
-    saveas(gcf,['./figure/',filename,'_1','.fig']);
+    plot(r,sd,'o')
+    xlabel('破裂半径/m');ylabel('应力降/MPa');
     
+%     fci=[0.01;180]; bar=[0.1,1,10,100];
+%     for i=1:4 % bar bar/10=Mpa
+%        for j=1:2 % fc
+%           Mc(j)=(0.49*tree.ssp.velocity*100000).^3.*bar(i)/fci(j)^3;
+%        end
+%        loglog(Mc,fci,'--','LineWidth',1.0);
+%        hold on
+%     end
+%     loglog(Mo,fc,'ko','MarkerSize',5),hold on;
+%     box on,grid minor,xlabel('Seismic moment /N·m'),ylabel('Corner Frequency /Hz')
+%     % xlim([10^10 10^18]),ylim([0.1 200])
+%     legend('\sigma = 0.01 MPa','\sigma = 0.10 MPa','\sigma = 1.00 MPa','\sigma = 10.0 MPa','This study') 
+%     saveas(gcf,['./figure/',filename,'_1','.png']);
+%     saveas(gcf,['./figure/',filename,'_1','.eps']);
+%     saveas(gcf,['./figure/',filename,'_1','.fig']);
+    
+    %-震级和矩震级、震级和地震矩
     f2 = figure(2002);
     subplot 121
     [pf ,sf ]= polyfit(mag,log10(Mo),1);
@@ -64,8 +69,12 @@ if exist('filename') && exist('pathname')
     saveas(gcf,['./figure/',filename,'_2','.png']);
     saveas(gcf,['./figure/',filename,'_2','.eps']);
     saveas(gcf,['./figure/',filename,'_2','.fig']);
+
+    % 应力降变化
     f3=figure(2003);
-    scatter(datenum(ymdhms),fc,80,mag,'filled'),datetick('x','yyyy/mm','keepticks')
+    [~,id]=sort(datenum(ymdhms));
+    tt = datenum(ymdhms);
+    scatter(tt(id),fc(id),80,mag(id),'filled'),datetick('x','yyyy/mm','keepticks')
     hold on
     plot(datenum(ymdhms),fc,'color',[0.6 0.6 0.6])
     box on;grid minor;xlabel('Time'),ylabel('Stress Drop/MPa'),title('应力降时域演化');
@@ -73,6 +82,7 @@ if exist('filename') && exist('pathname')
     saveas(gcf,['./figure/',filename,'_3','.png']);
     saveas(gcf,['./figure/',filename,'_3','.eps']);
     saveas(gcf,['./figure/',filename,'_3','.fig']);
+    % 相对应力降
     f4 = figure(2004);
     dp = exp(1.158.*mag-6.591);
     dsp2 = sd-dp;
@@ -94,7 +104,7 @@ if exist('filename') && exist('pathname')
     datetick('x','mm/dd','keepticks'),set(gca,'yminortick','on');set(gca,'xminortick','on');
     xlabel('时间/月日');ylabel('相对应力降/MPa');
     legend([h1,h2,h3],'Relative stress drop','Mean','RMSE')
-saveas(gcf,['./figure/',filename,'_4','.png']);
+    saveas(gcf,['./figure/',filename,'_4','.png']);
     saveas(gcf,['./figure/',filename,'_4','.eps']);
     saveas(gcf,['./figure/',filename,'_4','.fig']);
     zip(['./figure/',filename,'-ppara','.zip'],...

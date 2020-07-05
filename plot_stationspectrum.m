@@ -3,6 +3,7 @@ function plot_stationspectrum(xdata,ydata,type,str)
     % type:1-速度谱；2-位移谱；3-加速度谱
     % ftitle:图件title
     fv = xdata;S_sta = ydata;
+    fv = fv(fv<=20);S_sta=S_sta(fv<=20,:);
     type = type;str_tmp = '平均震源谱';
     ydatamean = median(S_sta,2);
     str = str(1:end-4);
@@ -17,6 +18,7 @@ function plot_stationspectrum(xdata,ydata,type,str)
 %                      'Location','SouthWest');
             legend([h],str_tmp,'Location','southwest')
             xlabel('Frequency (Hz)'); ylabel('velocity Spectrum');title(str);
+            xlim([0 50])
         case 2
             loglog(fv,S_sta); hold on,h = loglog(fv,ydatamean,'k','LineWidth',1.2);
 %             str_tmp=strrep(str_tmp(12:end),',',''',''');
@@ -27,6 +29,7 @@ function plot_stationspectrum(xdata,ydata,type,str)
 %                      'Location','SouthWest');
             legend([h],str_tmp,'Location','southwest')
             xlabel('Frequency (Hz)'); ylabel('Displacement Spectrum');title(str);
+            xlim([0 50])
         case 3
             loglog(fv,S_sta); hold on,h = loglog(fv,ydatamean,'k','LineWidth',1.2);
 %             str_tmp=strrep(str_tmp(12:end),',',''',''');
@@ -37,6 +40,7 @@ function plot_stationspectrum(xdata,ydata,type,str)
 %                      'Location','SouthWest');
             legend([h],str_tmp,'Location','southwest')
             xlabel('Frequency (Hz)'); ylabel('Acceleration Spectrum');title(str)
+            xlim([0 50])
     end
     
 end

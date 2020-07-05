@@ -44,6 +44,9 @@ else
     rmdir([cd,'\','temp'],'s')
     mkdir([cd,'\','temp'])  
 end
+if ~exist([cd,'\','filter']) 
+    mkdir([cd,'\','filter'])           % 若不存在，在当前目录中产生一个子目录‘temp’，存放临时变量
+end
 if ~exist([cd,'\','log']) 
     mkdir([cd,'\','log'])         % 若不存在，在当前目录中产生一个子目录‘result’，计算所得参数
 end
@@ -57,9 +60,6 @@ end
 if ~isempty(which('pso.m'))%是否含有pso工具箱
     addpath('./psopt');%添加粒子群工具箱
 end
-if ~isempty(which('ga.m'))%是否含有pso工具箱
-    addpath('./gaot');%添加粒子群工具箱
-end
 try
 h_mainmenu0 = uimenu(gcf,'label','文件');
     h_submenu01 = uimenu(h_mainmenu0,'label','返回主页..','callback','Run_Main()');
@@ -72,7 +72,7 @@ h_submenu11 = uimenu(h_mainmenu1,'label','单个地震自动计算');
     h_submenu112 = uimenu(h_submenu11,'label','导入观测报告..','callback','Loadreport();');
     h_submenu113 = uimenu(h_submenu11,'label','运行计算..','callback','Single_eq_cal();');
 h_submenu12 = uimenu(h_mainmenu1,'label','批量自动计算','callback','Cal_Batch();');
-h_submenu13 = uimenu(h_mainmenu1,'label','停止计算','callback','Cal_exit();');
+% h_submenu13 = uimenu(h_mainmenu1,'label','停止计算','callback','Cal_exit();');
 %     h_submenu13 = uimenu(h_mainmenu1,'label','逐步计算','callback','set(gcf,''Color'',''y'')');
 
 h_mainmenu6 = uimenu(gcf,'label','制图');
@@ -93,6 +93,8 @@ h_mainmenu2 = uimenu(gcf,'label','辅助工具');
 h_mainmenu3 = uimenu(gcf,'label','设置');
     h_submenu31 = uimenu(h_mainmenu3,'label','预处理参数设置','callback','Set_Pre_Para();');
     h_submenu32 = uimenu(h_mainmenu3,'label','运行参数设置','callback','Set_Cal_Para()');
+%     h_submenu36 = uimenu(h_mainmenu3,'label','导入滤波器参数','callback','load_filter_Para()');
+%     h_submenu35 = uimenu(h_mainmenu3,'label','滤波器设计','callback','fdatool()');
     h_submenu33 = uimenu(h_mainmenu3,'label','设置工具栏');
             h_submenu331 = uimenu(h_submenu33,'label','开启工具栏','callback','set(gcf,''toolbar'',''figure'')');
             h_submenu332 = uimenu(h_submenu33,'label','关闭工具栏','callback','set(gcf,''toolbar'',''none'')');

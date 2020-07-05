@@ -6,7 +6,7 @@ try
 catch ErrorInfo
     msgbox(ErrorInfo.message);
 end
-% try
+try
     file = textread([pathname,filename],'%s', 'delimiter', '\n', 'whitespace', '', ...
         'commentstyle', 'matlab');
     fidlog = fopen(['./log/',datestr(now,30),'.log'],'w');
@@ -34,6 +34,14 @@ end
             preconditioning.Qf = [tree.preprocessing.Qf_a,tree.preprocessing.Qf_b];
             preconditioning.instrumentcase = tree.preprocessing.resp;
             preconditioning.site = tree.preprocessing.site;
+            if exist(tree.preprocessing.filter,'file')
+                preconditioning.filter = tree.preprocessing.filter;
+            else
+                h = msgbox('滤波器参数文件不存在！已自动置为不滤波进行计算，请稍后！');
+                pause(1);
+                close(h);
+                preconditioning.filter = 0;
+            end
             %% 计算参数
             preconditioning.model = tree.model;
             preconditioning.delay = tree.signal.delay ;
@@ -218,14 +226,15 @@ end
             clear fv S_sta vel fv dis disl fv acc acc1 fvv SPECTRA
 %             fprintf(fidlog,'%s %s %s %s\n',datestr(now,31),evt_path_name,evt_path_name,'已计算')
             else
-%                 fprintf(fidlog,'%s %s %s %s\n',datestr(now,31),evt_path_name,evt_path_name,'未参与计算')
+%             fprintf(fidlog,'%s %s %s %s\n',datestr(now,31),evt_path_name,evt_path_name,'未参与计算')
                 continue;
+%                 msgbox('台站波形数目太少，不足4个。')
         end
         end
         fclose('all');
     end
     msgbox('计算完成！')
-% catch ErrorInfo
-%     msgbox([name,',',ErrorInfo.message]);
-% end
+catch ErrorInfo
+    msgbox([name,',',ErrorInfo.message]);
+end
 end

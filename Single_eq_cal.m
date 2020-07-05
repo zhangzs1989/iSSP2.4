@@ -28,6 +28,7 @@ else if ~exist('./temp/rpt_path_name.mat','file')
                     preconditioning.Qf = [tree.preprocessing.Qf_a,tree.preprocessing.Qf_b];
                     preconditioning.instrumentcase = tree.preprocessing.resp;
                     preconditioning.site = tree.preprocessing.site;
+                    preconditioning.filter = tree.preprocessing.filter;
                     %% 计算参数
                     preconditioning.model = tree.model;
                     preconditioning.delay = tree.signal.delay ;
@@ -60,8 +61,8 @@ else if ~exist('./temp/rpt_path_name.mat','file')
                         otherwise
                     end
                     SPECTRA = StationSpectra_z(wave,whead,event,preconditioning);
-                     SPECTRAnum = cellfun('isempty',SPECTRA);
-            index = find(SPECTRAnum == 0);SPECTRA = SPECTRA(index(1:end-1));
+                    SPECTRAnum = cellfun('isempty',SPECTRA);
+                    index = find(SPECTRAnum == 0);SPECTRA = SPECTRA(index(1:end-1));
                     if sum(SPECTRAnum~=1)>=tree.data.stanum
                     %% 画波形截取
                     h_wave = axes(gcf);
