@@ -37,7 +37,6 @@ for sti = 1:WAVEHEAD.stn
     [dist,az]   = distance(EVENT.epicenter,station);
     dist        = distdim(dist,'deg','km');
     samplerate  = WAVEHEAD.spara(sti).sample;
-    
     y=WAVE{sti}(:,1); y=y-mean(y);  % N-S
     x=WAVE{sti}(:,2); x=x-mean(x);  % E-W
     z=WAVE{sti}(:,3); z=z-mean(z);  % U-D
@@ -45,11 +44,19 @@ for sti = 1:WAVEHEAD.stn
     if filterpath==0
         y = y;x = x;z = z;
     else
-    %---------------------------------------------------------------
-    %   滤波
-    %---------------------------------------------------------------
-    coef = load(filterpath);[b,a]=sos2tf(coef.SOS,coef.G);
-    y = filtfilt(b,a,y1);x = filtfilt(b,a,x1);z = filtfilt(b,a,z1);  
+        %---------------------------------------------------------------
+        %   滤波
+        %---------------------------------------------------------------
+        coef = load(filterpath);[b,a]=sos2tf(coef.SOS,coef.G);
+        y = filtfilt(b,a,y1);x = filtfilt(b,a,x1);z = filtfilt(b,a,z1);
+        if sum(isnan(y))>floor(length(y)/2) || sum(isnan(x))>floor(length(x)/2) || sum(isnan(z))>floor(length(z)/2)
+%             hh = msgbox('滤波器参数配置有问题，请重新设计滤波器！！');
+%             pause(2);
+%             close(hh);
+            y = y1;x = x1;z = z1;
+        else
+            
+        end
     end
 %             x = bandpass(x,20,25,4);
 %             y = bandpass(y,0.1,20,0.01,4);

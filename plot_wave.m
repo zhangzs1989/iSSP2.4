@@ -6,6 +6,10 @@ end
 plot(SPECTRA{1}.to,SPECTRA{1}.do(:,1),'color',[0.7 0.7 0.7]);
 hold on
 plot(SPECTRA{1}.t,SPECTRA{1}.d(:,1),'color','r');
+rectangle('Position', [SPECTRA{1}.t(1) -max(max(abs(SPECTRA{1}.do(:,1)))) ...
+    SPECTRA{1}.t(end)-SPECTRA{1}.t(1) 2*max(max(abs(SPECTRA{1}.do(:,1))))],'FaceColor','g'...
+               ,'EdgeColor','red','LineWidth',1);
+plot(SPECTRA{1}.t,SPECTRA{1}.d(:,1),'color','r');
 xlabel('Time/s'); ylabel('Amplitude');box on;
 pp=gca;
 c = uicontextmenu;

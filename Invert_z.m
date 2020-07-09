@@ -1,7 +1,7 @@
 function spectpara = Invert_z(model,invert_method,xdata,ydata)
 % xdata: frequence
 % ydata: velocity spectrum
-    model = model;invert = invert_method;xdata = xdata;vel = ydata;
+    model = model;invert = invert_method;xdata = xdata(1<xdata<=20);vel = ydata(1<xdata<=20);
     disl = vel./(2*pi*xdata).^1;acc = vel.*(2*pi*xdata).^1;tecc = vel.*(2*pi*xdata).^2.5;
     save('./temp/fv.mat','xdata');save('./temp/disl.mat','disl');
     fun_Brune = @(a,b,x) (a./(1+(x./b).^2));                 
@@ -11,10 +11,10 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
         case 1
             switch invert
                 case 1
-                    [omg0,fc0,~,~,~,~] = spectpara_rmse_HC(xdata,ydata);
-                    [fitobj_1,gof] = fit(xdata,disl,(fun_Brune),'StartPoint',[omg0,fc0],...
-                    'Lower',[min(ydata) min(xdata)],...
-                    'Upper',[max(disl) 20  ],...
+%                     [omg0,fc0,~,~,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,gof] = fit(xdata,disl,(fun_Brune),'StartPoint',[10,2],...
+                    'Lower',[min(ydata) 5],...
+                    'Upper',[max(disl) 20],...
                     'Robust','on');
                     CI = confint(fitobj_1,0.95);		 % 95% confidence intervals
                     omega =fitobj_1.a;
@@ -35,10 +35,17 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.omg_intervals = [omg,omg];
                     spectpara.outfc = outfc;
                 case 3 % pso
-%                     fitnessfcn = @(par,x) (par(1)./(1+(x./par(2)).^2));                     
-                    uplimits= [0 10];
-                    lolimits= [1000 1];
-                    [omg0,fc0,~,~,~,~] = spectpara_rmse_HC(xdata,ydata);
+%                     fitnessfcn = @(par,x) (par(1)./(1+(x./par(2)).^2));       
+                    [fitobj_1,gof] = fit(xdata,disl,(fun_Brune),'StartPoint',[10,2],...
+                    'Lower',[min(ydata) 5],...
+                    'Upper',[max(disl) 20],...
+                    'Robust','on');
+                    CI = confint(fitobj_1,0.95);		 % 95% confidence intervals
+                    omg0 =fitobj_1.a;
+                    fc0    =fitobj_1.b;
+                    uplimits= [500 5];
+                    lolimits= [10 1];
+%                     [omg0,fc0,~,~,~,~] = spectpara_rmse_HC(xdata,ydata);
                     x0 = [omg0,fc0];
                     problem.options.InitialPopulation = x0 ;
                     problem.Aineq = [] ; problem.bineq = [] ;
@@ -63,10 +70,10 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
         case 2  % High-Cut模型      
             switch invert
                 case 1  % matlab 自带拟合函数        
-                    [omg,fc,fmax,p,~,~] = spectpara_rmse_HC(xdata,ydata);
-                    [fitobj_1,~] = fit(xdata,disl,fun_Boore,'StartPoint',[omg,fc,fmax,p],...
-                        'Lower',[0,1,5,0],...
-                        'Upper',[Inf,10,20,5],...
+%                     [omg,fc,fmax,p,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,~] = fit(xdata,disl,fun_Boore,'StartPoint',[10,2,10,2],...
+                        'Lower',[1,1,10,1],...
+                        'Upper',[500,5,20,5],...
                         'Robust','on');
                     CI = confint(fitobj_1,0.95);		 % 95% confidence intervals
                     omega =fitobj_1.a;
@@ -116,11 +123,20 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.p_intervals = [p,p];
                     spectpara.outfc = outfc;
                     spectpara.outfmax = outfmax;
-                case 3 % ga
-                    [omg0,fc0,fmax0,p0,outfc0,outfmax0] = spectpara_rmse_HC(xdata,ydata);
-                    uplimits= [];
-                    lolimits= [];
-                    problem.options.InitialPopulation = [omg0 fc0 fmax0 p0];
+                case 3 % pso
+%                     [omg,fc,fmax,p,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,~] = fit(xdata,disl,fun_Boore,'StartPoint',[10,2,10,2],...
+                        'Lower',[1,1,10,1],...
+                        'Upper',[500,5,20,5],...
+                        'Robust','on');
+                    CI = confint(fitobj_1,0.95);		 % 95% confidence intervals
+                    omega =fitobj_1.a;
+                    fc    =fitobj_1.b;
+                    fmax  =fitobj_1.c;
+                    p     =fitobj_1.d;
+                    uplimits= [500,5,20,5];
+                    lolimits= [1,1,10,1];
+                    problem.options.InitialPopulation = [omega fc fmax p];
                     problem.Aineq = [] ; problem.bineq = [] ;
                     problem.Aeq = [] ;   problem.beq = [] ;
                     problem.LB = lolimits ;
@@ -157,10 +173,10 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
         case 3 %Brune2 model
             switch invert
                 case 1 %fit
-                    [omg0,fc0,~,p0,~,~] = spectpara_rmse_HC(xdata,ydata);
-                    [fitobj_1,~] = fit(xdata,disl,(fun_Brune2),'StartPoint',[omg0,fc0,p0],...
-                    'Lower',[0,1,1],...
-                    'Upper',[max(disl) 10 5],...
+%                     [omg0,fc0,~,p0,~,~] = spectpara_rmse_HC(xdata,ydata);
+                    [fitobj_1,~] = fit(xdata,disl,(fun_Brune2),'StartPoint',[10,2,2],...
+                    'Lower',[1,1,1],...
+                    'Upper',[max(disl) 5 5],...
                     'Robust','on');
                     CI = confint(fitobj_1,0.95);		 % 95% confidence intervals
                     omega =fitobj_1.a;
@@ -188,17 +204,9 @@ function spectpara = Invert_z(model,invert_method,xdata,ydata)
                     spectpara.outfc = outfc;
                     spectpara.outgamma = outgamma;
                 case 3 %pso
-% %                     LB=[0 1 1]; % lower boundary
-% %                     UB=[10000 10 5]; % upper boundary
-% % %                     fitnessfcn = str2func('brune');
-% %                     ObjectiveFunction = @brune2_ga; 
-% %                     nvars = 3; % number of varibles
-% %                     ConstraintFunction = []; % constraints
-% % %                     rng default; % for reproducibality ?
-% %                     [coeff,~]=ga(ObjectiveFunction,nvars);
-                    uplimits= [0 1 1];
-                    lolimits= [50 10 5];
-                    problem.options.InitialPopulation = [5,mean(acc)/(2*pi*5).^2,2] ;
+                    uplimits= [1 1 1];
+                    lolimits= [500 5 5];
+                    problem.options.InitialPopulation = [10,2,2] ;
                     problem.Aineq = [] ; problem.bineq = [] ;
                     problem.Aeq = [] ;   problem.beq = [] ;
                     problem.LB = lolimits ;

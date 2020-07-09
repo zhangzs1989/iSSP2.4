@@ -46,9 +46,10 @@ else if ~exist('./temp/rpt_path_name.mat','file')
                     switch tree.data.reportform
                         case 1
                             Event = ReadReport_for_PgSg(rpt_path_name);
-                            event = Event.event;
+                            event = Event.event;    
                         case 2
-                            msgbox('暂不支持该观测报告格式')
+                            Event = rd_jopens_rpt(rpt_path_name);
+                            event = Event;
                         otherwise
                     end
                     switch tree.data.waveform
@@ -106,12 +107,13 @@ else if ~exist('./temp/rpt_path_name.mat','file')
                     dlmwrite(['./result/',name,'.csv'],[fv S_sta vel fv dis disl fv acc acc1],'-append','precision', 6);
                     fclose('all');
                     %% 画位移谱
+                    stalist = [str_tmp,'ALL'];
                     h_dis = axes(gcf);
                     set(h_dis,'Position',[0.6 0.6 0.35 0.3]);
-                    plot_stationspectrum(fv,dis,2,name);
+                    plot_stationspectrum(fv,dis,2,name,stalist);
                     h_acc = axes(gcf);
                     set(h_acc,'Position',[0.08 0.1 0.35 0.3]);
-                    plot_stationspectrum(fv,acc,3,name);
+                    plot_stationspectrum(fv,acc,3,name,stalist);
                     
                     %% 拟合反演谱参数
                     fv_i = fv(fv<20);

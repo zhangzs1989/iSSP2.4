@@ -6,7 +6,7 @@ try
 catch ErrorInfo
     msgbox(ErrorInfo.message);
 end
-try
+% try
     file = textread([pathname,filename],'%s', 'delimiter', '\n', 'whitespace', '', ...
         'commentstyle', 'matlab');
     fidlog = fopen(['./log/',datestr(now,30),'.log'],'w');
@@ -19,7 +19,7 @@ try
             h_axes=findobj(gcf,'type','axes'); %%获得当前图中所有坐标的句柄
             % h_children_axes=allchild(h_axes); %% 获得坐标的子对象的句柄
             delete(h_axes);
-            evt_path_name = char(file{(eqi-1)*2+1})
+            evt_path_name = char(file{(eqi-1)*2+1});
             rpt_path_name = char(file{eqi*2});
             if strcmp(evt_path_name(end-3:end),'.txt')
                 temp = rpt_path_name;
@@ -34,7 +34,7 @@ try
             preconditioning.Qf = [tree.preprocessing.Qf_a,tree.preprocessing.Qf_b];
             preconditioning.instrumentcase = tree.preprocessing.resp;
             preconditioning.site = tree.preprocessing.site;
-            if exist(tree.preprocessing.filter,'file')
+            if exist(num2str(tree.preprocessing.filter),'file')
                 preconditioning.filter = tree.preprocessing.filter;
             else
                 h = msgbox('滤波器参数文件不存在！已自动置为不滤波进行计算，请稍后！');
@@ -61,7 +61,8 @@ try
                     Event = ReadReport_for_PgSg(rpt_path_name);
                     event = Event.event;
                 case 2
-                    msgbox('暂不支持该观测报告格式')
+                   Event = rd_jopens_rpt(rpt_path_name);
+                   event = Event;
                 otherwise
             end
             switch tree.data.waveform
@@ -79,7 +80,7 @@ try
             if sum(SPECTRAnum~=1)>=tree.data.stanum
             %% 画波形截取
             h_wave = axes(gcf);
-            set(h_wave,'Position',[0.08 0.6 0.35 0.3]);
+            set(h_wave,'Position',[0.05 0.6 0.4 0.35]);
             plot_wave(SPECTRA);
             %%
             stn=numel(SPECTRA);
@@ -119,12 +120,13 @@ try
             dlmwrite(['./result/',name,'.csv'],[fv S_sta vel fv dis disl fv acc acc1],'-append','precision', 6);
             fclose('all');
             %% 画位移谱
+            stalist = [str_tmp,'ALL'];
             h_dis = axes(gcf);
-            set(h_dis,'Position',[0.6 0.6 0.35 0.3]);
-            plot_stationspectrum(fv,dis,2,name);
+            set(h_dis,'Position',[0.55 0.6 0.4 0.35]);
+            plot_stationspectrum(fv,dis,2,name,stalist);
             h_acc = axes(gcf);
-            set(h_acc,'Position',[0.08 0.1 0.35 0.3]);
-            plot_stationspectrum(fv,acc,3,name);
+            set(h_acc,'Position',[0.05 0.1 0.4 0.35]);
+            plot_stationspectrum(fv,acc,3,name,stalist);
             %% 拟合反演谱参数
             fv_i = fv(fv<20);
             vel_i = vel(fv<20);
@@ -132,7 +134,7 @@ try
             [mo,mw,r,sd] = Sourceparameters_z(specpara.omg,specpara.fc,preconditioning);% 震源参数
             %% 画拟合结果和震源参数结果
             h_result = axes(gcf);
-            set(h_result,'Position',[0.6 0.1 0.35 0.3]);
+            set(h_result,'Position',[0.55 0.1 0.4 0.35]);
             plot_fitspectrum(fv,disl,tree.model,specpara,mo,mw,r,sd);
             saveas(gcf,['./figure/',name,'.png']);saveas(gcf,['./figure/',name,'.fig']);
             zip(['./figure/',name,'_',num2str(tree.model),'_',num2str(tree.invert),'.zip'],{['./figure/',name,'.png'],['./figure/',name,'.fig']});
@@ -224,17 +226,18 @@ try
             end
             fclose('all');            
             clear fv S_sta vel fv dis disl fv acc acc1 fvv SPECTRA
+            pause(2.0)
 %             fprintf(fidlog,'%s %s %s %s\n',datestr(now,31),evt_path_name,evt_path_name,'已计算')
             else
 %             fprintf(fidlog,'%s %s %s %s\n',datestr(now,31),evt_path_name,evt_path_name,'未参与计算')
                 continue;
 %                 msgbox('台站波形数目太少，不足4个。')
-        end
+            end    
         end
         fclose('all');
     end
     msgbox('计算完成！')
-catch ErrorInfo
-    msgbox([name,',',ErrorInfo.message]);
-end
+% catch ErrorInfo
+%     msgbox([name,',',ErrorInfo.message]);
+% end
 end

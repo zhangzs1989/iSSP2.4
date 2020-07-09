@@ -26,7 +26,7 @@ switch model
 %     'HorizontalAlignment','left','BackgroundColor',[1 1 .9],'EdgeColor','r',...
 %         'LineWidth',1,'FontSize',10);
     legend([h1,h2,h3],'平均观测位移谱','理论位移谱','拐角频率')
-    xlim([-0.1 40])
+    xlim([10^(-2) 100])
     case 2 % High-Cut
     h1 = loglog(fv,displ,'m');grid on;%title ('SH - Spectrum');
     xlabel('Frequency (Hz)'); ylabel( 'Displacement Spectrum');grid on;hold on
@@ -51,7 +51,7 @@ switch model
 %     'HorizontalAlignment','left','BackgroundColor',[1 1 .9],'EdgeColor','r',...
 %         'LineWidth',1,'FontSize',10);
     legend('平均观测位移谱','理论位移谱','Location','SouthWest')
-    xlim([-0.1 40])
+	xlim([10^(-2) 100])
     case 3
     h1 = loglog(fv,displ,'m');grid on;%title ('SH - Spectrum');
     xlabel('Frequency (Hz)'); ylabel( 'Displacement Spectrum');grid on;hold on
@@ -70,6 +70,6 @@ switch model
     mstr2=num2str(sd,'%.3f');
     text(tx,ty*3,['  {\it f}_c= ',fcstr,' Hz;',' M_w= ',mstr1,';','{\it r} = ',fcstrr,' m;', '\Delta\sigma=',mstr2,' MPa'],'HorizontalAlignment','left',...
     'BackgroundColor',[1 1 .9],'EdgeColor','r','LineWidth',1,'FontSize',10); 
-    xlim([-0.1 40])
+	xlim([10^(-2) 100])
 end
 end

@@ -11,7 +11,7 @@
    </softinfo>
    <data>
       <waveform>1</waveform>
-      <reportform>1</reportform>
+      <reportform>2</reportform>
       <stanum>4</stanum>
    </data>
    <preprocessing>
@@ -20,15 +20,15 @@
       <gatten>1</gatten>
       <resp>1</resp>
       <site>1</site>
-      <filter>D:\Program Files\MATLAB\R2016a\works\2020面上项目\untitled2.mat</filter>
+      <filter>0</filter>
    </preprocessing>
    <signal>
       <fftnum>1024</fftnum>
       <wavetype>2</wavetype>
       <delay>1</delay>
    </signal>
-   <model>1</model>
-   <invert>1</invert>
+   <model>2</model>
+   <invert>3</invert>
    <ssp>
       <density>2.67</density>
       <velocity>3.2</velocity>

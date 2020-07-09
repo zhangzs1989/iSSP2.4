@@ -12,7 +12,7 @@ main_p = [0.1*W,0.1*H,0.5*W,0.5*H];
 statelabel_p = [0.6*W,0.65*H,0.05*W,0.02*H];
 stateedit_p = [0.574*W,0.05*H,0.1*W,0.6*H];
 hmain = figure('Color',[1,1,1],'Position',main_p,...
-    'Name','中小地震震源参数反演计算程序V2.0','NumberTitle','off','MenuBar','none');
+    'Name','中小地震震源参数反演计算程序V2.3','NumberTitle','off','MenuBar','none');
 try
 v = ver('MATLAB');
 v = str2double(regexp(v.Version, '\d.\d','match','once'));
@@ -57,8 +57,11 @@ close(hwb);
 catch ErrorInfo
     msgbox(ErrorInfo.message);
 end
-if ~isempty(which('pso.m'))%是否含有pso工具箱
-    addpath('./psopt');%添加粒子群工具箱
+if isempty(which('pso.m'))%是否含有pso工具箱
+    addpath(genpath('./psopt'));%添加粒子群工具箱
+end
+if isempty(which('ga.m'))%是否含有pso工具箱
+    addpath(genpath('./gaot'));%添加粒子群工具箱
 end
 try
 h_mainmenu0 = uimenu(gcf,'label','文件');
